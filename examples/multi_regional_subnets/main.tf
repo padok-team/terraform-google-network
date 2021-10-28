@@ -10,7 +10,7 @@ provider "google-beta" {
   region  = "europe-west3"
 }
 
-module "use_case_1" {
+module "my_network" {
   source = "../.."
 
   project = "padok-cloud-factory"

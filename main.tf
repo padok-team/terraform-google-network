@@ -45,11 +45,13 @@ resource "google_vpc_access_connector" "this" {
   network       = google_compute_network.this.name
 }
 
-# resource "google_project_service" "service" {
-#   count = var.delete_default_network ? 1 : 0
-#   service = "compute.googleapis.com"
+resource "google_project_service" "service" {
+  count = var.delete_default_network ? 1 : 0
+  service = "compute.googleapis.com"
+  disable_dependent_services = false
+  disable_on_destroy = false 
 
-#   provisioner "local-exec" {
-#     command = "gcloud compute firewall-rules delete default-allow-icmp default-allow-internal default-allow-rdp default-allow-ssh --project=${var.project} && gcloud -q compute networks delete default --project=${var.project}"
-#   }
-# }
+  provisioner "local-exec" {
+    command = "gcloud compute firewall-rules delete default-allow-icmp default-allow-internal default-allow-rdp default-allow-ssh --project=${var.project} && gcloud -q compute networks delete default --project=${var.project}"
+  }
+}

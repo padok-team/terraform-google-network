@@ -6,7 +6,7 @@ Terraform module which creates network, subnets, and few peerings resources on G
 
 - AAUSER I can create network and its subnets
 - AAUSER I can create network, its subnets and a VPC Peering with GCP network (used to connect a Cloud SQL instance)
-- AAUSER I can create network, its suvnets and a VPC connector used to access VPC resources from Cloud Functions or Cloud Run instances
+- AAUSER I can create network, its subnets and a VPC connector used to access VPC resources from Cloud Functions or Cloud Run instances
 
 ## Usage
 

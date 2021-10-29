@@ -13,12 +13,17 @@ provider "google-beta" {
 module "my_network" {
   source = "../.."
 
-  name = "my-super-network"
+  name = "my-super-network-3"
   subnets = {
-    "my-subnet1" = {
+    "private-subnet-1" = {
       cidr = "10.20.0.0/16"
       region = "europe-west3"
     }
   }
-  cloudsql = true
+  peerings = {
+    cloudsql = {
+      address = "10.0.1.0"
+      prefix = 24
+    }
+  }
 }

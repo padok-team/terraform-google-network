@@ -27,7 +27,7 @@ variable "name" {
 variable "subnets" {
   type = map(object({
     cidr   = string
-    region = optional(string)
+    region = string
   }))
   description = "Subnets list"
   validation {
@@ -48,13 +48,6 @@ variable "routing_mode" {
   type        = string
   default     = "REGIONAL"
   description = "The network-wide routing mode to use. If set to REGIONAL, this network's cloud routers will only advertise routes with subnetworks of this network in the same region as the router. If set to GLOBAL, this network's cloud routers will advertise routes with all subnetworks of this network, across regions. "
-}
-
-variable "cloudsql" {
-  type        = bool
-  default     = false
-  description = "If true, create VPC peering for CloudSQL."
-
 }
 
 variable "cloudrun" {
@@ -79,5 +72,13 @@ variable "log_config_filter" {
   type        = string
   default     = "ERRORS_ONLY"
   description = "Specifies the desired filtering of logs on this NAT. Possible values are ERRORS_ONLY, TRANSLATIONS_ONLY, and ALL"
+}
 
+variable "peerings" {
+  type = map(object({
+    address = string
+    prefix = number
+  }))
+  description = "Map of all the peering to create with "
+  default = {}
 }

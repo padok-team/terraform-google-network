@@ -2,6 +2,8 @@ locals {
   regions = toset([
     for x in var.subnets : x.region
   ])
+
+  range_names = [for k, v in var.peerings : length("${var.name}-${k}") >= 63 ? "${substr(var.name, 0, length("${k}"))}" : "${var.name}-${k}"]
 }
 
 
@@ -20,24 +22,30 @@ resource "google_compute_subnetwork" "this" {
 }
 
 resource "google_compute_global_address" "this" {
-  count         = var.cloudsql ? 1 : 0
-  name          = length("${var.name}-db") >= 63 ? "${substr(var.name, 0, 60)}-db" : "${var.name}-db"
+  for_each      = var.peerings
+
+  name          = length("${var.name}-${each.key}") >= 63 ? "${substr(var.name, 0, length("${each.key}"))}" : "${var.name}-${each.key}"
   purpose       = "VPC_PEERING"
   address_type  = "INTERNAL"
-  prefix_length = 16
+  prefix_length = each.value.prefix
+  address       = each.value.address
   network       = google_compute_network.this.id
 }
 
 resource "google_service_networking_connection" "this" {
-  count                   = var.cloudsql ? 1 : 0
+  count                   = length(var.peerings) > 0 ? 1 : 0
   network                 = google_compute_network.this.id
   service                 = "servicenetworking.googleapis.com"
-  reserved_peering_ranges = [google_compute_global_address.this[0].name]
+  reserved_peering_ranges = local.range_names
+
+  depends_on = [
+    google_compute_global_address.this
+  ]
 }
 
 resource "google_vpc_access_connector" "this" {
-  count    = var.cloudrun ? 1 : 0
-  provider = google-beta
+  count         = var.cloudrun ? 1 : 0
+  provider      = google-beta
 
   name          = length("${var.name}-connector") >= 25 ? "${substr(var.name, 0, 15)}-connector" : "${var.name}-connector"
   ip_cidr_range = "10.8.0.0/28"

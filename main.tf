@@ -12,9 +12,7 @@ resource "google_compute_network" "this" {
 }
 
 resource "google_compute_subnetwork" "this" {
-  for_each = {
-    for k, v in var.subnets : k => v
-  }
+  for_each = var.subnets
   name          = each.key
   ip_cidr_range = each.value.cidr
   region        = each.value.region

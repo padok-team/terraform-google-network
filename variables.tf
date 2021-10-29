@@ -1,31 +1,31 @@
 variable "project" {
-  type = string
+  type        = string
   description = "Google Cloud Platform project"
-  default = null
+  default     = null
 }
 
 variable "region" {
-  type = string
+  type        = string
   description = "Google Cloud Platform region"
-  default = null
+  default     = null
 }
 
 variable "name" {
   type        = string
   description = "Name of the network"
   validation {
-    condition     =  length(var.name) > 1 && length(var.name) <= 63
+    condition     = length(var.name) > 1 && length(var.name) <= 63
     error_message = "The name must be 1-63 characters long ."
   }
 
   validation {
-    condition     =  can(regex("^[a-z]([-a-z0-9]*[a-z0-9])?", var.name))
+    condition     = can(regex("^[a-z]([-a-z0-9]*[a-z0-9])?", var.name))
     error_message = "The name must match the regular expression ^[a-z]([-a-z0-9]*[a-z0-9])? ."
   }
 }
 
 variable "subnets" {
-  type        = map(object({
+  type = map(object({
     cidr   = string
     region = optional(string)
   }))
@@ -34,7 +34,7 @@ variable "subnets" {
     condition     = can([for k, v in var.subnets : length(k) > 1 && length(k) <= 63])
     error_message = "The name must be 1-63 characters long ."
   }
-   validation {
+  validation {
     condition     = can([for k, v in var.subnets : can(regex("^[a-z]([-a-z0-9]*[a-z0-9])?", k))])
     error_message = "The name must match the regular expression ^[a-z]([-a-z0-9]*[a-z0-9])? ."
   }
@@ -67,4 +67,17 @@ variable "delete_default_network" {
   type        = bool
   default     = false
   description = "If true, create a VPC network used by Cloud Run instances to access VPC resources."
+}
+
+variable "log_config_enable" {
+  type        = bool
+  default     = false
+  description = " Indicates whether or not to export logs."
+}
+
+variable "log_config_filter" {
+  type        = string
+  default     = "ERRORS_ONLY"
+  description = "Specifies the desired filtering of logs on this NAT. Possible values are ERRORS_ONLY, TRANSLATIONS_ONLY, and ALL"
+
 }

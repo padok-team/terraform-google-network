@@ -14,7 +14,6 @@ module "my_network" {
   source = "../.."
 
   project = "padok-cloud-factory"
-  delete_default_network = true
   name = "my-super-network"
   subnets = {
     "my-subnet1" = {

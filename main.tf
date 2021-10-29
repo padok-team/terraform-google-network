@@ -46,9 +46,6 @@ resource "google_vpc_access_connector" "this" {
 
 resource "google_compute_router" "this" {
   for_each = local.regions
-  depends_on = [
-    google_compute_subnetwork.this
-  ]
 
   name    = length("${var.name}-router") >= 63 ? "${substr(var.name, 0, 56)}-router" : "${var.name}-router"
   region  = each.value
@@ -57,13 +54,14 @@ resource "google_compute_router" "this" {
   bgp {
     asn = 64514
   }
+
+  depends_on = [
+    google_compute_subnetwork.this
+  ]
 }
 
 resource "google_compute_router_nat" "this" {
   for_each                           = local.regions
-  depends_on = [
-    google_compute_subnetwork.this
-  ]
 
   name                               = length("${var.name}-router-nat") >= 63 ? "${substr(var.name, 0, 52)}-router-nat" : "${var.name}-router-nat"
   router                             = google_compute_router.this[each.key].name
@@ -75,4 +73,8 @@ resource "google_compute_router_nat" "this" {
     enable = var.log_config_enable
     filter = var.log_config_filter
   }
+
+  depends_on = [
+    google_compute_subnetwork.this
+  ]
 }

@@ -10,16 +10,16 @@ variable "region" {
   default = null
 }
 
-variable "network_name" {
+variable "name" {
   type        = string
   description = "Name of the network"
   validation {
-    condition     =  length(var.network_name) > 1 && length(var.network_name) <= 63
+    condition     =  length(var.name) > 1 && length(var.name) <= 63
     error_message = "The name must be 1-63 characters long ."
   }
 
   validation {
-    condition     =  can(regex("^[a-z]([-a-z0-9]*[a-z0-9])?", var.network_name))
+    condition     =  can(regex("^[a-z]([-a-z0-9]*[a-z0-9])?", var.name))
     error_message = "The name must match the regular expression ^[a-z]([-a-z0-9]*[a-z0-9])? ."
   }
 }

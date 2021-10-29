@@ -15,7 +15,7 @@ module "my_network" {
 
   project = "padok-cloud-factory"
   delete_default_network = true
-  network_name = "my-super-network"
+  name = "my-super-network"
   subnets = {
     "my-subnet1" = {
       cidr = "10.20.0.0/16"

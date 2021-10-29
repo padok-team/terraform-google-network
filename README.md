@@ -14,7 +14,7 @@ Terraform module which creates network, subnets, and few peerings resources on G
 module "example" {
   source = "https://github.com/padok-team/terraform-google-network"
 
-  network_name = "my-super-network"
+  name = "my-super-network"
   subnets = {
     "my-subnet1" = {
       cidr = "10.20.0.0/16"
@@ -40,7 +40,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_network_name"></a> [network\_name](#input\_network\_name) | Name of the network | `string` | n/a | yes |
+| <a name="input_name"></a> [network\_name](#input\_network\_name) | Name of the network | `string` | n/a | yes |
 | <a name="input_subnets"></a> [subnets](#input\_subnets) | Subnets list | <pre>map(object({<br>    cidr = string<br>  }))</pre> | n/a | yes |
 | <a name="input_cloudrun"></a> [cloudrun](#input\_cloudrun) | If true, create a VPC network used by Cloud Run instances to access VPC resources. | `bool` | `false` | no |
 | <a name="input_cloudsql"></a> [cloudsql](#input\_cloudsql) | If true, create VPC peering for CloudSQL. | `bool` | `false` | no |

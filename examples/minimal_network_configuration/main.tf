@@ -13,7 +13,7 @@ provider "google-beta" {
 module "my_network" {
   source = "../.."
 
-  network_name = "my-super-network"
+  name = "my-super-network"
   subnets = {
     "my-subnet1" = {
       cidr = "10.20.0.0/16"

@@ -16,7 +16,7 @@ module "my_network" {
   network_name = "my-super-network"
   subnets = {
     "my-subnet1" = {
-      cidr = "10.20.0.0/16"c
+      cidr = "10.20.0.0/16"
       region = "europe-west3"
     }
   }

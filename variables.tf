@@ -15,7 +15,7 @@ variable "name" {
   description = "Name of the network"
   validation {
     condition     = length(var.name) > 1 && length(var.name) <= 63
-    error_message = "The name must be 1-63 characters long ."
+    error_message = "The name must be 1-63 characters long."
   }
 
   validation {
@@ -32,7 +32,7 @@ variable "subnets" {
   description = "Subnets list"
   validation {
     condition     = can([for k, v in var.subnets : length(k) > 1 && length(k) <= 63])
-    error_message = "The name must be 1-63 characters long ."
+    error_message = "The name must be 1-63 characters long."
   }
   validation {
     condition     = can([for k, v in var.subnets : can(regex("^[a-z]([-a-z0-9]*[a-z0-9])?", k))])
@@ -47,7 +47,7 @@ variable "subnets" {
 variable "routing_mode" {
   type        = string
   default     = "REGIONAL"
-  description = "The network-wide routing mode to use. If set to REGIONAL, this network's cloud routers will only advertise routes with subnetworks of this network in the same region as the router. If set to GLOBAL, this network's cloud routers will advertise routes with all subnetworks of this network, across regions. "
+  description = "The network-wide routing mode to use. If set to REGIONAL, this network's cloud routers will only advertise routes with subnetworks of this network in the same region as the router. If set to GLOBAL, this network's cloud routers will advertise routes with all subnetworks of this network, across all regions. "
 }
 
 variable "cloudrun" {
@@ -59,19 +59,19 @@ variable "cloudrun" {
 variable "delete_default_network" {
   type        = bool
   default     = false
-  description = "If true, create a VPC network used by Cloud Run instances to access VPC resources."
+  description = "If true, deletes the default VPC"
 }
 
 variable "log_config_enable" {
   type        = bool
   default     = false
-  description = " Indicates whether or not to export logs."
+  description = "Indicates whether or not to export logs."
 }
 
 variable "log_config_filter" {
   type        = string
   default     = "ERRORS_ONLY"
-  description = "Specifies the desired filtering of logs on this NAT. Possible values are ERRORS_ONLY, TRANSLATIONS_ONLY, and ALL"
+  description = "Specifies the desired filtering of logs on the NAT. Possible values are ERRORS_ONLY, TRANSLATIONS_ONLY, and ALL"
 }
 
 variable "peerings" {
@@ -79,6 +79,6 @@ variable "peerings" {
     address = string
     prefix = number
   }))
-  description = "Map of all the peering to create with "
+  description = "Map of all the peering to create with the module"
   default = {}
 }

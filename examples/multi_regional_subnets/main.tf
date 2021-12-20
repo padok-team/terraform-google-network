@@ -1,19 +1,17 @@
-# Short description of the use case in comments
-
 provider "google" {
-  project = "padok-cloud-factory"
+  project = "<YOUR_PROJECT_ID>"
   region  = "europe-west3"
 }
 
 provider "google-beta" {
-  project = "padok-cloud-factory"
+  project = "<YOUR_PROJECT_ID>"
   region  = "europe-west3"
 }
 
 module "my_network" {
   source = "../.."
 
-  project = "padok-cloud-factory"
+  project = "<YOUR_PROJECT_ID>"
   name = "my-super-network"
   subnets = {
     "my-subnet1" = {

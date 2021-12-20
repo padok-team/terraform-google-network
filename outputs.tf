@@ -4,5 +4,5 @@ output "network" {
     id      = google_compute_network.this.id
     subnets = google_compute_subnetwork.this
   }
-  description = "Name of created network and its subnets."
+  description = "Name, ID and subnets of created network."
 }

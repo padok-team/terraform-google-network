@@ -1,4 +1,4 @@
-# GOOGLE Terraform module
+# Google Network Terraform module
 
 Terraform module which creates network, subnets, and few peerings resources on Google Cloud Platform.
 

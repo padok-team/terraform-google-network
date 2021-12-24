@@ -56,16 +56,10 @@ variable "cloudrun" {
   description = "If true, create a VPC network used by Cloud Run instances to access VPC resources."
 }
 
-variable "delete_default_network" {
-  type        = bool
-  default     = false
-  description = "If true, create a VPC network used by Cloud Run instances to access VPC resources."
-}
-
 variable "log_config_enable" {
   type        = bool
   default     = false
-  description = " Indicates whether or not to export logs."
+  description = "Indicates whether or not to export logs."
 }
 
 variable "log_config_filter" {
@@ -77,8 +71,8 @@ variable "log_config_filter" {
 variable "peerings" {
   type = map(object({
     address = string
-    prefix = number
+    prefix  = number
   }))
-  description = "Map of all the peering to create with "
-  default = {}
+  description = "Map of all the peerings to create with."
+  default     = {}
 }

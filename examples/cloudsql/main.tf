@@ -16,14 +16,14 @@ module "my_network" {
   name = "my-super-network-3"
   subnets = {
     "private-subnet-1" = {
-      cidr = "10.20.0.0/16"
+      cidr   = "10.20.0.0/16"
       region = "europe-west3"
     }
   }
   peerings = {
     cloudsql = {
       address = "10.0.1.0"
-      prefix = 24
+      prefix  = 24
     }
   }
 }

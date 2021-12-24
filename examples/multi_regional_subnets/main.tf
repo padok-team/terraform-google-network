@@ -14,14 +14,14 @@ module "my_network" {
   source = "../.."
 
   project = "padok-cloud-factory"
-  name = "my-super-network"
+  name    = "my-super-network"
   subnets = {
     "my-subnet1" = {
-      cidr = "10.20.0.0/16"
+      cidr   = "10.20.0.0/16"
       region = "europe-west3"
     }
     "my-subnet2" = {
-      cidr = "10.21.0.0/16"
+      cidr   = "10.21.0.0/16"
       region = "europe-west1"
     }
   }

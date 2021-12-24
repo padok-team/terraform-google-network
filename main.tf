@@ -14,7 +14,7 @@ resource "google_compute_network" "this" {
 }
 
 resource "google_compute_subnetwork" "this" {
-  for_each = var.subnets
+  for_each      = var.subnets
   name          = each.key
   ip_cidr_range = each.value.cidr
   region        = each.value.region
@@ -22,7 +22,7 @@ resource "google_compute_subnetwork" "this" {
 }
 
 resource "google_compute_global_address" "this" {
-  for_each      = var.peerings
+  for_each = var.peerings
 
   name          = length("${var.name}-${each.key}") >= 63 ? "${substr(var.name, 0, length("${each.key}"))}" : "${var.name}-${each.key}"
   purpose       = "VPC_PEERING"
@@ -44,8 +44,8 @@ resource "google_service_networking_connection" "this" {
 }
 
 resource "google_vpc_access_connector" "this" {
-  count         = var.cloudrun ? 1 : 0
-  provider      = google-beta
+  count    = var.cloudrun ? 1 : 0
+  provider = google-beta
 
   name          = length("${var.name}-connector") >= 25 ? "${substr(var.name, 0, 15)}-connector" : "${var.name}-connector"
   ip_cidr_range = "10.8.0.0/28"
@@ -69,7 +69,7 @@ resource "google_compute_router" "this" {
 }
 
 resource "google_compute_router_nat" "this" {
-  for_each                           = local.regions
+  for_each = local.regions
 
   name                               = length("${var.name}-router-nat") >= 63 ? "${substr(var.name, 0, 52)}-router-nat" : "${var.name}-router-nat"
   router                             = google_compute_router.this[each.key].name

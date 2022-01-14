@@ -1,3 +1,3 @@
 output "network" {
-  value = module.my_network.network
+  value = module.my_network.compute_network
 }

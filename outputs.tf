@@ -1,4 +1,4 @@
-output "network" {
+output "compute_network" {
   value = {
     name    = google_compute_network.this.name
     id      = google_compute_network.this.id

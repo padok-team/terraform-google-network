@@ -66,7 +66,7 @@ variable "log_config_enable" {
 variable "log_config_filter" {
   description = "Specifies the desired filtering of logs on this NAT. Possible values are ERRORS_ONLY, TRANSLATIONS_ONLY, and ALL."
   type        = string
-  default     = "ERRORS_ONLY."
+  default     = "ERRORS_ONLY"
 }
 
 variable "peerings" {

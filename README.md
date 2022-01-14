@@ -2,6 +2,10 @@
 
 Terraform module which creates network, subnets, and few peerings resources on Google Cloud Platform.
 
+## Licence
+
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 ## User Stories for this module
 
 - AAUSER I can create network and its subnets

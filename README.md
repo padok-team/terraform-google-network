@@ -4,7 +4,7 @@ Terraform module which creates network, subnets, and few peerings resources on G
 
 ## Licence
 
-
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## User Stories for this module
 
@@ -60,5 +60,3 @@ No modules.
 |------|-------------|
 | <a name="output_compute_network"></a> [compute\_network](#output\_compute\_network) | Name of created network and its subnets. |
 <!-- END_TF_DOCS -->
-
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)

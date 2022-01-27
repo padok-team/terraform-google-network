@@ -1,0 +1,16 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: terraform-google-network
+  description: A Terraform module which creates network, subnets, and few peerings resources on Google Cloud Platform.
+  tags:
+    - "terraform"
+    - "google"
+  annotations:
+    github.com/project-slug: padok-team/terraform-google-network
+    # backstage.io/techdocs-ref: dir:.
+spec:
+  type: module
+  system: terraform
+  owner: julienj@padok.fr
+  lifecycle: ready-to-use

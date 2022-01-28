@@ -1,15 +1,3 @@
-variable "project" {
-  description = "Google Cloud Platform project."
-  type        = string
-  default     = null
-}
-
-variable "region" {
-  description = "Google Cloud Platform region."
-  type        = string
-  default     = null
-}
-
 variable "name" {
   description = "Name of the network"
   type        = string

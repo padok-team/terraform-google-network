@@ -1,3 +1,4 @@
 output "network" {
-  value = module.use_case_1.compute_network
+  value       = module.my_network.compute_network
+  description = "Name of created network and its subnets."
 }

@@ -21,7 +21,7 @@ resource "google_compute_subnetwork" "this" {
   network       = google_compute_network.this.id
 }
 
-resource "google_compute_global_address" "this" {
+resource "google_compute_global_address" "peering" {
   for_each = var.peerings
 
   name          = length("${var.name}-${each.key}") >= 63 ? "${substr(var.name, 0, length("${each.key}"))}" : "${var.name}-${each.key}"
@@ -39,7 +39,7 @@ resource "google_service_networking_connection" "this" {
   reserved_peering_ranges = local.range_names
 
   depends_on = [
-    google_compute_global_address.this
+    google_compute_global_address.peering
   ]
 }
 
@@ -68,13 +68,37 @@ resource "google_compute_router" "this" {
   ]
 }
 
+resource "google_compute_address" "nat" {
+  for_each = {
+    for value in local.regions : value => value
+    if var.nat_static_ip
+  }
+
+  name   = "${each.value}-nat"
+  region = each.value
+
+  address_type = "EXTERNAL"
+}
+
+data "google_compute_address" "nat" {
+  for_each = {
+    for value in local.regions : value => value
+    if var.nat_static_ip
+  }
+  name = "${each.value}-nat"
+  depends_on = [
+    google_compute_address.nat
+  ]
+}
+
 resource "google_compute_router_nat" "this" {
   for_each = local.regions
 
   name                               = length("${var.name}-router-nat") >= 63 ? "${substr(var.name, 0, 52)}-router-nat" : "${var.name}-router-nat"
   router                             = google_compute_router.this[each.key].name
   region                             = each.value
-  nat_ip_allocate_option             = "AUTO_ONLY"
+  nat_ip_allocate_option             = var.nat_static_ip ? "MANUAL_ONLY" : "AUTO_ONLY"
+  nat_ips                            = var.nat_static_ip ? [google_compute_address.nat[each.value].self_link] : []
   source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
 
   log_config {

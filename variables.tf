@@ -51,6 +51,12 @@ variable "log_config_enable" {
   default     = false
 }
 
+variable "nat_static_ip" {
+  description = "Feature flag to enable static IP address for NAT Gateway"
+  type        = bool
+  default     = false
+}
+
 variable "log_config_filter" {
   description = "Specifies the desired filtering of logs on this NAT. Possible values are ERRORS_ONLY, TRANSLATIONS_ONLY, and ALL."
   type        = string

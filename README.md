@@ -9,6 +9,7 @@ Terraform module which creates network, subnets, and few peerings resources on G
 ## User Stories for this module
 
 - AAUSER I can create network and its subnets
+- AAUSER I can create network, its subnets and nat static IPs
 - AAUSER I can create network, its subnets and a VPC Peering with GCP network (used to connect a Cloud SQL instance)
 - AAUSER I can create network, its subnets and a VPC connector used to access VPC resources from Cloud Functions or Cloud Run instances
 
@@ -34,6 +35,7 @@ module "example" {
 - [Example of network with multi regional subnets use case](examples/multi_regional_subnets/main.tf)
 - [Example of network with cloudrun activated](examples/cloudrun/main.tf)
 - [Example of network with a cloudsql peering](examples/cloudsql/main.tf)
+- [Example of network with nat static IPs](examples/nat_static_ips/main.tf)
 
 <!-- BEGIN_TF_DOCS -->
 ## Modules

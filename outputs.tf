@@ -3,6 +3,7 @@ output "compute_network" {
     name    = google_compute_network.this.name
     id      = google_compute_network.this.id
     subnets = google_compute_subnetwork.this
+    nat_ips = var.enable_nat_static_ip ? flatten([for region in local.regions : google_compute_address.nat[*][region].address]) : []
   }
   description = "Name of created network and its subnets."
 }
@@ -10,9 +11,4 @@ output "compute_network" {
 output "vpc_access_connector_name" {
   value       = one(google_vpc_access_connector.this[*].name)
   description = "Name of created access connector (filled if 'cloudrun=true')"
-}
-
-output "nat_static_ips" {
-  value       = { for key, value in data.google_compute_address.nat : key => value.address }
-  description = "Map of IPs if NAT Static IP Flag is enabled"
 }

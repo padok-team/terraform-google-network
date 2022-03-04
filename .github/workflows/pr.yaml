@@ -5,4 +5,4 @@ on:
 
 jobs:
   cicd:
-    uses: Alan-pad/workflow-testing/terraform/module-pull-request.yml@master
+    uses: Alan-pad/workflow-testing/.github/workflows/terraform/module-pull-request.yml@master

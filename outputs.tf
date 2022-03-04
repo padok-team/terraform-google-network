@@ -9,5 +9,5 @@ output "compute_network" {
 
 output "vpc_access_connector_name" {
   value       = one(google_vpc_access_connector.this[*].name)
-  description = "Name of created access connector (filled if 'cloudrun=true')"
+  # description = "Name of created access connector (filled if 'cloudrun=true')"
 }

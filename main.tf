@@ -3,7 +3,7 @@ locals {
     for x in var.subnets : x.region
   ])
 
-  range_names = [for k, v in var.peerings : length("${var.name}-${k}") >= 63 ? "${substr(var.name, 0, length("${k}"))}" : "${var.name}-${k}"]
+  range_names = [for k, v in var.peerings : length("${var.name}-${k}") >= 63 ? "${substr(var.name, 0, 62 - length(k))}-${k}" : "${var.name}-${k}"]
 }
 
 
@@ -24,7 +24,7 @@ resource "google_compute_subnetwork" "this" {
 resource "google_compute_global_address" "peering" {
   for_each = var.peerings
 
-  name          = length("${var.name}-${each.key}") >= 63 ? "${substr(var.name, 0, length("${each.key}"))}" : "${var.name}-${each.key}"
+  name          = length("${var.name}-${each.key}") >= 63 ? "${substr(var.name, 0, 62 - length(each.key))}-${each.key}" : "${var.name}-${each.key}"
   purpose       = "VPC_PEERING"
   address_type  = "INTERNAL"
   prefix_length = each.value.prefix

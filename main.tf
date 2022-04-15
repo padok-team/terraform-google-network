@@ -1,88 +1,81 @@
 locals {
-  regions = toset([
-    for x in var.subnets : x.region
+  regions = flatten([
+    for v in var.subnets : [
+      v.subnet_region
+    ]
   ])
-
-  range_names = [for k, v in var.peerings : length("${var.name}-${k}") >= 63 ? "${substr(var.name, 0, length("${k}"))}" : "${var.name}-${k}"]
 }
 
+module "vpc" {
+  source  = "terraform-google-modules/network/google"
+  version = "5.0.0"
 
-resource "google_compute_network" "this" {
-  auto_create_subnetworks = false
-  name                    = var.name
-  routing_mode            = var.routing_mode
+  project_id                             = var.project_id
+  network_name                           = var.network_name
+  routing_mode                           = var.routing_mode
+  description                            = var.description
+  auto_create_subnetworks                = var.auto_create_subnetworks
+  subnets                                = var.subnets
+  mtu                                    = var.mtu
+  secondary_ranges                       = var.secondary_ranges
+  routes                                 = var.routes
+  firewall_rules                         = var.firewall_rules
+  delete_default_internet_gateway_routes = var.delete_default_internet_gateway_routes
 }
 
-resource "google_compute_subnetwork" "this" {
-  for_each      = var.subnets
-  name          = each.key
-  ip_cidr_range = each.value.cidr
-  region        = each.value.region
-  network       = google_compute_network.this.id
+module "nat_addresses" {
+  source  = "terraform-google-modules/address/google"
+  version = "3.1.1"
+
+  for_each = toset(local.regions)
+
+  region       = each.key
+  names        = ["nat-${var.network_name}-${each.key}"]
+  project_id   = var.project_id
+  address_type = "EXTERNAL"
 }
 
-resource "google_compute_global_address" "this" {
-  for_each = var.peerings
+module "router" {
+  source  = "terraform-google-modules/cloud-router/google"
+  version = "1.3.0"
 
-  name          = length("${var.name}-${each.key}") >= 63 ? "${substr(var.name, 0, length("${each.key}"))}" : "${var.name}-${each.key}"
+  for_each = toset(local.regions)
+
+  name    = "${var.network_name}-${each.key}"
+  project = var.project_id
+  region  = each.key
+  network = module.vpc.network_name
+  nats = [{
+    name    = "${var.network_name}-${each.key}"
+    nat_ips = module.nat_addresses[each.key].self_links
+  }]
+}
+
+resource "google_compute_global_address" "gcp-services" {
+  name          = "${var.network_name}-gcp-services"
   purpose       = "VPC_PEERING"
   address_type  = "INTERNAL"
-  prefix_length = each.value.prefix
-  address       = each.value.address
-  network       = google_compute_network.this.id
+  project       = var.project_id
+  prefix_length = split("/", var.gcp_services_cidr)[1]
+  address       = split("/", var.gcp_services_cidr)[0]
+  network       = module.vpc.network_id
 }
 
-resource "google_service_networking_connection" "this" {
-  count                   = length(var.peerings) > 0 ? 1 : 0
-  network                 = google_compute_network.this.id
+resource "google_service_networking_connection" "default" {
+  network                 = module.vpc.network_id
   service                 = "servicenetworking.googleapis.com"
-  reserved_peering_ranges = local.range_names
-
-  depends_on = [
-    google_compute_global_address.this
-  ]
+  reserved_peering_ranges = [google_compute_global_address.gcp-services.name]
 }
 
-resource "google_vpc_access_connector" "this" {
-  count    = var.cloudrun ? 1 : 0
-  provider = google-beta
-
-  name          = length("${var.name}-connector") >= 25 ? "${substr(var.name, 0, 15)}-connector" : "${var.name}-connector"
-  ip_cidr_range = "10.8.0.0/28"
-  network       = google_compute_network.this.name
-}
-
-resource "google_compute_router" "this" {
-  for_each = local.regions
-
-  name    = length("${var.name}-router") >= 63 ? "${substr(var.name, 0, 56)}-router" : "${var.name}-router"
-  region  = each.value
-  network = var.name
-
-  bgp {
-    asn = 64514
+resource "google_vpc_access_connector" "default" {
+  for_each = {
+    for value in var.vpc_serverless_connectors : "${value.name}" => value
   }
 
-  depends_on = [
-    google_compute_subnetwork.this
-  ]
-}
-
-resource "google_compute_router_nat" "this" {
-  for_each = local.regions
-
-  name                               = length("${var.name}-router-nat") >= 63 ? "${substr(var.name, 0, 52)}-router-nat" : "${var.name}-router-nat"
-  router                             = google_compute_router.this[each.key].name
-  region                             = each.value
-  nat_ip_allocate_option             = "AUTO_ONLY"
-  source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
-
-  log_config {
-    enable = var.log_config_enable
-    filter = var.log_config_filter
-  }
-
-  depends_on = [
-    google_compute_subnetwork.this
-  ]
+  project        = var.project_id
+  max_throughput = 800
+  name           = each.value.name
+  region         = each.value.region
+  ip_cidr_range  = each.value.cidr
+  network        = module.vpc.network_name
 }

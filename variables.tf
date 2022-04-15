@@ -1,67 +1,76 @@
-variable "name" {
-  description = "Name of the network"
-  type        = string
-  validation {
-    condition     = length(var.name) > 1 && length(var.name) <= 63
-    error_message = "The name must be 1-63 characters long."
-  }
+## VPC GOOGLE MODULE VARIABLES
 
-  validation {
-    condition     = can(regex("^[a-z]([-a-z0-9]*[a-z0-9])?", var.name))
-    error_message = "The name must match the regular expression ^[a-z]([-a-z0-9]*[a-z0-9])?."
-  }
+variable "project_id" {
+  description = "The ID of the project where this VPC will be created"
 }
 
-variable "subnets" {
-  description = "Subnets list."
-  type = map(object({
-    cidr   = string
-    region = string
-  }))
-
-  validation {
-    condition     = can([for k, v in var.subnets : length(k) > 1 && length(k) <= 63])
-    error_message = "The name must be 1-63 characters long."
-  }
-  validation {
-    condition     = can([for k, v in var.subnets : can(regex("^[a-z]([-a-z0-9]*[a-z0-9])?", k))])
-    error_message = "The name must match the regular expression ^[a-z]([-a-z0-9]*[a-z0-9])?."
-  }
-  validation {
-    condition     = can([for k, v in var.subnets : regex("^([0-9]{1,3}.){3}[0-9]{1,3}[\\/](([0-9]|[1-2][0-9]|3[0-2]))+$", v.cidr)])
-    error_message = "Your CIDR must match the following pattern XX.XX.XX.XX/YY (e.g. 192.168.0.1/32)."
-  }
+variable "network_name" {
+  description = "The name of the network being created"
 }
 
 variable "routing_mode" {
-  description = "The network-wide routing mode to use. If set to REGIONAL, this network's cloud routers will only advertise routes with subnetworks of this network in the same region as the router. If set to GLOBAL, this network's cloud routers will advertise routes with all subnetworks of this network, across regions."
   type        = string
-  default     = "REGIONAL"
+  default     = "GLOBAL"
+  description = "The network routing mode (default 'GLOBAL')"
 }
 
-variable "cloudrun" {
-  description = "If true, create a VPC network used by Cloud Run instances to access VPC resources."
+variable "subnets" {
+  type        = list(map(string))
+  description = "The list of subnets being created"
+}
+
+variable "secondary_ranges" {
+  type        = map(list(object({ range_name = string, ip_cidr_range = string })))
+  description = "Secondary ranges that will be used in some of the subnets"
+  default     = {}
+}
+
+variable "routes" {
+  type        = list(map(string))
+  description = "List of routes being created in this VPC"
+  default     = []
+}
+
+variable "firewall_rules" {
+  type        = any
+  description = "List of firewall rules"
+  default     = []
+}
+
+variable "delete_default_internet_gateway_routes" {
   type        = bool
+  description = "If set, ensure that all routes within the network specified whose names begin with 'default-route' and with a next hop of 'default-internet-gateway' are deleted"
   default     = false
 }
 
-variable "log_config_enable" {
-  description = "Indicates whether or not to export logs."
+variable "description" {
+  type        = string
+  description = "An optional description of this resource. The resource must be recreated to modify this field."
+  default     = ""
+}
+
+variable "auto_create_subnetworks" {
   type        = bool
+  description = "When set to true, the network is created in 'auto subnet mode' and it will create a subnet for each region automatically across the 10.128.0.0/9 address range. When set to false, the network is created in 'custom subnet mode' so the user can explicitly connect subnetwork resources."
   default     = false
 }
 
-variable "log_config_filter" {
-  description = "Specifies the desired filtering of logs on this NAT. Possible values are ERRORS_ONLY, TRANSLATIONS_ONLY, and ALL."
-  type        = string
-  default     = "ERRORS_ONLY"
+variable "mtu" {
+  type        = number
+  description = "The network MTU. Must be a value between 1460 and 1500 inclusive. If set to 0 (meaning MTU is unset), the network will default to 1460 automatically."
+  default     = 0
 }
 
-variable "peerings" {
-  description = "Map of all the peerings to create with."
-  type = map(object({
-    address = string
-    prefix  = number
-  }))
-  default = {}
+## GCP Services CIDR
+
+variable "gcp_services_cidr" {
+  type        = string
+  description = "CIDR to reserve for GCP service in this VPC"
+}
+
+## Serverless Connectors
+
+variable "vpc_serverless_connectors" {
+  type        = list(map(string))
+  description = "List of CIDR to be used for vpc_serverless_connectors"
 }

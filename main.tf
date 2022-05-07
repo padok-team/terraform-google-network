@@ -4,78 +4,136 @@ locals {
       v.subnet_region
     ]
   ])
+  
+  
+  subnets = []
+  secondary_ranges = [] # map(list(object({ range_name = string, ip_cidr_range = string })))
+  
+  vpc_access_connector = {
+    "europe-west1" = ["cidr1"]
+  }
 }
+
 
 module "vpc" {
   source  = "terraform-google-modules/network/google"
   version = "5.0.0"
 
   project_id                             = var.project_id
-  network_name                           = var.network_name
+
+  network_name                           = var.name
   routing_mode                           = var.routing_mode
-  description                            = var.description
-  auto_create_subnetworks                = var.auto_create_subnetworks
-  subnets                                = var.subnets
-  mtu                                    = var.mtu
-  secondary_ranges                       = var.secondary_ranges
-  routes                                 = var.routes
-  firewall_rules                         = var.firewall_rules
-  delete_default_internet_gateway_routes = var.delete_default_internet_gateway_routes
+  subnets                                = local.subnets
+  secondary_ranges                       = local.secondary_ranges
+  auto_create_subnetworks                = false
+  mtu                                    = 0
+  # TODO : Check if not needed by nat
+  delete_default_internet_gateway_routes = true
 }
 
-module "nat_addresses" {
-  source  = "terraform-google-modules/address/google"
-  version = "3.1.1"
 
+#
+# ROUTER
+#
+
+resource "google_compute_router" "router" {
+  for_each = toset(local.regions)
+  
+  project     = var.project_id
+  region      = each.key
+  
+  name        = "router-${each.key}-${var.name}"
+  network     = module.vpc.network_name
+}
+
+
+#
+# NAT
+#
+
+resource "google_compute_address" "ip" {
   for_each = toset(local.regions)
 
+  project      = var.project_id
   region       = each.key
-  names        = ["nat-${var.network_name}-${each.key}"]
-  project_id   = var.project_id
-  address_type = "EXTERNAL"
+
+  name         = "nat-${each.key}-${var.name}"
+  address_type ="EXTERNAL"
+  purpose      = null
+  network_tier = "PREMIUM"
 }
 
-module "router" {
-  source  = "terraform-google-modules/cloud-router/google"
-  version = "1.3.0"
-
+resource "google_compute_router_nat" "nat" {
   for_each = toset(local.regions)
 
-  name    = "${var.network_name}-${each.key}"
-  project = var.project_id
-  region  = each.key
-  network = module.vpc.network_name
-  nats = [{
-    name    = "${var.network_name}-${each.key}"
-    nat_ips = module.nat_addresses[each.key].self_links
-  }]
+  project     = var.project_id
+  
+  name   = "nat-${google_compute_router.router[each.key].name}"
+  router = google_compute_router.router[each.key].name
+  region = google_compute_router.router[each.key].region
+
+  nat_ip_allocate_option             = "MANUAL_ONLY"
+  source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
+
+  nat_ips                             = [google_compute_address.ip[each.key].self_link]
+  min_ports_per_vm                    = 0
+  udp_idle_timeout_sec                = 30
+  icmp_idle_timeout_sec               = 30
+  tcp_established_idle_timeout_sec    = 1200
+  tcp_transitory_idle_timeout_sec     = 30
+  enable_endpoint_independent_mapping = true
+
+  log_config {
+    enable = true
+    filter = "ALL"
+  }
 }
 
-resource "google_compute_global_address" "gcp-services" {
-  name          = "${var.network_name}-gcp-services"
+#
+# PEERING GOOGLE NETWORK SERVICES
+#
+
+resource "google_compute_global_address" "gcp_services_peering" {
+  project       = var.project_id
+
+  name          = "gcp-services-peering-${var.name}"
   purpose       = "VPC_PEERING"
   address_type  = "INTERNAL"
-  project       = var.project_id
-  prefix_length = split("/", var.gcp_services_cidr)[1]
-  address       = split("/", var.gcp_services_cidr)[0]
+  prefix_length = split("/", var.gcp_peering_cidr)[1]
+  address       = split("/", var.gcp_peering_cidr)[0]
   network       = module.vpc.network_id
 }
 
 resource "google_service_networking_connection" "default" {
   network                 = module.vpc.network_id
   service                 = "servicenetworking.googleapis.com"
-  reserved_peering_ranges = [google_compute_global_address.gcp-services.name]
+  reserved_peering_ranges = [google_compute_global_address.gcp_services_peering.name]
+}
+
+
+#
+# SERVERLESS
+#
+
+locals {
+  vac = {for subnet in var.subnets : "${subnet.region}-${subnet.serverless_cidr}" => subnet if subnet.serverless_cidr != ""}
+
+  vac1 = {
+    "region1-1" = "cidr1"
+    "region1-2" = "cidr2"
+    "region2-1" = "cidr1"
+  }
 }
 
 resource "google_vpc_access_connector" "default" {
-  for_each = {
-    for value in var.vpc_serverless_connectors : "${value.name}" => value
-  }
+  # Warning : only 1 by region
+  for_each = local.vac
 
   project        = var.project_id
-  max_throughput = 800
-  name           = each.value.name
   region         = each.value.region
-  ip_cidr_range  = each.value.cidr
+  
+  name           = "${each.value.region}-${module.vpc.network_name}-${each.value.region[index]}"
+  ip_cidr_range  = each.value.serverless_cidr
   network        = module.vpc.network_name
+  max_throughput = 800
 }

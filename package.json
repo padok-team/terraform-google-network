@@ -1,8 +1,0 @@
-{
-    "description": " npm version",
-    "scripts": {
-        "version": "standard-version --no-verify",
-        "dry-run": "standard-version --dry-run --no-verify"
-    },
-    "version": "2.0.4"
-}

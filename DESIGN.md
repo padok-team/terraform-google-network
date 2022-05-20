@@ -10,6 +10,7 @@
 # Interface and implementation
 
 # NETWORK ROOT MODULE
+```hcl
 module "network" {
     source = "../network"
     project_id = string
@@ -172,3 +173,4 @@ module "vpc" {
   gcp_services_cidr = each.value.gcp_services_cidr
   serverless_cidr   = each.value.serverless_cidr
 }
+```

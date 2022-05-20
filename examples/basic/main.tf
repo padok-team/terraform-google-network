@@ -1,24 +1,23 @@
 module "basic" {
   source = "../.."
 
-  network_name = "testing"
-  project_id   = "padok-host"
-  subnets = [
-    {
-      subnet_name   = "eu"
-      subnet_ip     = "172.16.48.0/20"
-      subnet_region = "europe-west1"
+  name       = "testing"
+  project_id = "library-344516"
+  subnets = {
+    "eu" = {
+      name             = "eu"
+      region           = "europe-west1"
+      primary_cidr     = "172.16.48.0/20"
+      serverless_cidr  = "172.16.80.0/28"
+      secondary_ranges = {}
     },
-    {
-      subnet_name   = "us"
-      subnet_ip     = "172.16.96.0/20"
-      subnet_region = "northamerica-northeast1"
+    "us" = {
+      name             = "us"
+      region           = "northamerica-northeast1"
+      primary_cidr     = "172.16.96.0/20"
+      serverless_cidr  = ""
+      secondary_ranges = {}
     }
-  ]
-  gcp_services_cidr = "172.16.64.0/20"
-  vpc_serverless_connectors = [{
-    name   = "eu"
-    cidr   = "172.16.80.0/20"
-    region = "europe-west1"
-  }]
+  }
+  gcp_peering_cidr = "172.16.64.0/20"
 }

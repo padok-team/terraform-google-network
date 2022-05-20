@@ -1,34 +1,56 @@
 locals {
+  # Regions list
   regions = flatten([
-    for v in var.subnets : [
-      v.subnet_region
+    for subnet in var.subnets : [
+      subnet.region
     ]
   ])
-  
-  
-  subnets = []
-  secondary_ranges = [] # map(list(object({ range_name = string, ip_cidr_range = string })))
-  
-  vpc_access_connector = {
-    "europe-west1" = ["cidr1"]
+
+  # VPC Access Connectors map
+  vpc_access_connectors = {
+    for idx, subnet in values(var.subnets) :
+    "${subnet.region}-${idx}" => subnet
+    if subnet.serverless_cidr != ""
+  }
+
+  # Match the Google VPC module interface
+  subnets = [
+    for subnet in var.subnets : {
+      subnet_name   = subnet.name
+      subnet_ip     = subnet.primary_cidr
+      subnet_region = subnet.region
+    }
+  ]
+
+  # Match the Google VPC module interface
+  secondary_ranges = {
+    for subnet in var.subnets :
+    subnet.name => [
+      for range in subnet.secondary_ranges :
+      {
+        range_name    = range.name
+        ip_cidr_range = range.cidr
+      }
+    ]
   }
 }
 
-
+# Create network and its subnets
 module "vpc" {
   source  = "terraform-google-modules/network/google"
   version = "5.0.0"
 
-  project_id                             = var.project_id
+  project_id = var.project_id
 
-  network_name                           = var.name
-  routing_mode                           = var.routing_mode
-  subnets                                = local.subnets
-  secondary_ranges                       = local.secondary_ranges
-  auto_create_subnetworks                = false
-  mtu                                    = 0
+  network_name            = var.name
+  routing_mode            = var.routing_mode
+  subnets                 = local.subnets
+  secondary_ranges        = local.secondary_ranges
+  auto_create_subnetworks = false
+  mtu                     = 0
+
   # TODO : Check if not needed by nat
-  delete_default_internet_gateway_routes = true
+  # delete_default_internet_gateway_routes = true
 }
 
 
@@ -38,12 +60,12 @@ module "vpc" {
 
 resource "google_compute_router" "router" {
   for_each = toset(local.regions)
-  
-  project     = var.project_id
-  region      = each.key
-  
-  name        = "router-${each.key}-${var.name}"
-  network     = module.vpc.network_name
+
+  project = var.project_id
+  region  = each.key
+
+  name    = "router-${each.key}-${var.name}"
+  network = module.vpc.network_name
 }
 
 
@@ -54,11 +76,11 @@ resource "google_compute_router" "router" {
 resource "google_compute_address" "ip" {
   for_each = toset(local.regions)
 
-  project      = var.project_id
-  region       = each.key
+  project = var.project_id
+  region  = each.key
 
   name         = "nat-${each.key}-${var.name}"
-  address_type ="EXTERNAL"
+  address_type = "EXTERNAL"
   purpose      = null
   network_tier = "PREMIUM"
 }
@@ -66,8 +88,8 @@ resource "google_compute_address" "ip" {
 resource "google_compute_router_nat" "nat" {
   for_each = toset(local.regions)
 
-  project     = var.project_id
-  
+  project = var.project_id
+
   name   = "nat-${google_compute_router.router[each.key].name}"
   router = google_compute_router.router[each.key].name
   region = google_compute_router.router[each.key].region
@@ -94,7 +116,7 @@ resource "google_compute_router_nat" "nat" {
 #
 
 resource "google_compute_global_address" "gcp_services_peering" {
-  project       = var.project_id
+  project = var.project_id
 
   name          = "gcp-services-peering-${var.name}"
   purpose       = "VPC_PEERING"
@@ -115,25 +137,13 @@ resource "google_service_networking_connection" "default" {
 # SERVERLESS
 #
 
-locals {
-  vac = {for subnet in var.subnets : "${subnet.region}-${subnet.serverless_cidr}" => subnet if subnet.serverless_cidr != ""}
-
-  vac1 = {
-    "region1-1" = "cidr1"
-    "region1-2" = "cidr2"
-    "region2-1" = "cidr1"
-  }
-}
-
 resource "google_vpc_access_connector" "default" {
-  # Warning : only 1 by region
-  for_each = local.vac
+  for_each = local.vpc_access_connectors
 
-  project        = var.project_id
-  region         = each.value.region
-  
-  name           = "${each.value.region}-${module.vpc.network_name}-${each.value.region[index]}"
+  project = var.project_id
+  region  = each.value.region
+
+  name           = each.key
   ip_cidr_range  = each.value.serverless_cidr
   network        = module.vpc.network_name
-  max_throughput = 800
 }

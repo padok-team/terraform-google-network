@@ -116,6 +116,8 @@ resource "google_compute_router_nat" "nat" {
 #
 
 resource "google_compute_global_address" "gcp_services_peering" {
+  count = var.gcp_peering_cidr == "" ? 0 : 1
+
   project = var.project_id
 
   name          = "gcp-services-peering-${var.name}"
@@ -127,11 +129,12 @@ resource "google_compute_global_address" "gcp_services_peering" {
 }
 
 resource "google_service_networking_connection" "default" {
+  count = length(google_compute_global_address.gcp_services_peering)
+
   network                 = module.vpc.network_id
   service                 = "servicenetworking.googleapis.com"
-  reserved_peering_ranges = [google_compute_global_address.gcp_services_peering.name]
+  reserved_peering_ranges = [google_compute_global_address.gcp_services_peering[count.index].name]
 }
-
 
 #
 # SERVERLESS
@@ -143,7 +146,7 @@ resource "google_vpc_access_connector" "default" {
   project = var.project_id
   region  = each.value.region
 
-  name           = each.key
-  ip_cidr_range  = each.value.serverless_cidr
-  network        = module.vpc.network_name
+  name          = each.key
+  ip_cidr_range = each.value.serverless_cidr
+  network       = module.vpc.network_name
 }

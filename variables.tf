@@ -31,5 +31,6 @@ variable "subnets" {
 }
 
 variable "gcp_peering_cidr" {
+  type        = string
   description = "CIDR to reserve for GCP service in this VPC"
 }

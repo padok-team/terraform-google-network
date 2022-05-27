@@ -26,15 +26,6 @@ commit: ## Commits all files
 
 cz: doc precommit commit  ## Runs Docs, precommit and commits
 
-##@ Version
-dry-run: ## Dry run the version
-	$(call info_colors,green,👏 Generate Version Dry Run)
-	@npm run dry-run
-
-version: ## Generate the version
-	$(call info_colors,green,👏 Generate Version)
-	@npm run version
-
 include $(DIR_GIT)/prettier.mk
 
-.PHONY: all doc format precommit commit cz dry-run version
+.PHONY: all doc format precommit commit cz

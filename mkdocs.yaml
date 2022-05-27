@@ -1,0 +1,15 @@
+---
+site_name: terraform-google-network
+
+repo_name: padok-team/terraform-google-network
+repo_url: https://github.com/padok-team/terraform-google-network
+
+plugins:
+  - techdocs-core
+  - include-markdown
+
+nav:
+  - Reference: index.md
+  - Usage:
+    - Basic: 'usage/basic.md'
+    - GKE:  'usage/gke.md'

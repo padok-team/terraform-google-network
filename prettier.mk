@@ -16,10 +16,6 @@ install_tools: ## Install all the necessary tools
 	@brew install pre-commit
 	$(call info_colors,blue,👏 Installing Terraform Docs)
 	@brew install terraform-docs
-	$(call info_colors,purple,👏 Installing Standard-Version)
-	npm install -g standard-version
-
-
 
 
 .PHONY: colors

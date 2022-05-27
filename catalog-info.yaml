@@ -8,9 +8,9 @@ metadata:
     - "google"
   annotations:
     github.com/project-slug: padok-team/terraform-google-network
-    # backstage.io/techdocs-ref: dir:.
+    backstage.io/techdocs-ref: dir:.
 spec:
   type: module
   system: terraform
-  owner: julienj@padok.fr
-  lifecycle: ready-to-use
+  owner: library-gcp
+  lifecycle: awaiting-feedback

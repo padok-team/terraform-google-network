@@ -1,12 +1,10 @@
-#
-# ROOT MODULE
-#
-
 variable "project_id" {
+  type = string
   description = "The ID of the project where this VPC will be created"
 }
 
 variable "name" {
+  type = string
   description = "The name of the network being created"
 }
 

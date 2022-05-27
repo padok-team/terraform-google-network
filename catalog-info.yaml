@@ -12,5 +12,5 @@ metadata:
 spec:
   type: module
   system: terraform
-  owner: julienj@padok.fr
-  lifecycle: ready-to-use
+  owner: library-gcp
+  lifecycle: awaiting-feedback

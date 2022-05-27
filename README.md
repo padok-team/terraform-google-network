@@ -2,34 +2,10 @@
 
 Terraform module which creates network, subnets, and few peerings resources on Google Cloud Platform.
 
-## User Stories for this module
-
-- AAUSER I can create network and its subnets
-- AAUSER I can create network, its subnets and a VPC Peering with GCP network (used to connect a Cloud SQL instance)
-- AAUSER I can create network, its subnets and a VPC connector used to access VPC resources from Cloud Functions or Cloud Run instances
-
-## Usage
-
-```hcl
-module "example" {
-  source = "https://github.com/padok-team/terraform-google-network"
-
-  name = "my-super-network"
-  subnets = {
-    "my-subnet1" = {
-      cidr   = "10.20.0.0/16"
-      region = "europe-west3"
-    }
-  }
-}
-```
-
 ## Examples
 
-- [Example of minimal network configuration use case (one VPC and one subnet)](examples/minimal_network_configuration/main.tf)
-- [Example of network with multi regional subnets use case](examples/multi_regional_subnets/main.tf)
-- [Example of network with cloudrun activated](examples/cloudrun/main.tf)
-- [Example of network with a cloudsql peering](examples/cloudsql/main.tf)
+- [Example of minimal network configuration use case](examples/basic/main.tf)
+- [Example of network for GKE use case](examples/gke/main.tf)
 
 <!-- BEGIN_TF_DOCS -->
 ## Modules

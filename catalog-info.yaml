@@ -8,7 +8,7 @@ metadata:
     - "google"
   annotations:
     github.com/project-slug: padok-team/terraform-google-network
-    # backstage.io/techdocs-ref: dir:.
+    backstage.io/techdocs-ref: dir:.
 spec:
   type: module
   system: terraform

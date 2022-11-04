@@ -38,7 +38,7 @@ locals {
 # Create network and its subnets
 module "vpc" {
   source  = "terraform-google-modules/network/google"
-  version = "5.0.0"
+  version = "5.2.0"
 
   project_id = var.project_id
 

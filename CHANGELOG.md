@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/padok-team/terraform-google-network/compare/v3.0.0...v3.1.0) (2023-01-25)
+
+
+### Features
+
+* **examples:** adapt examples for custom nat gateways ([cec8f94](https://github.com/padok-team/terraform-google-network/commit/cec8f942bfa2fb21a5353d842806c2f3a372d27d))
+* **hashicorp/google:** bump version to 4.49 ([b91c88d](https://github.com/padok-team/terraform-google-network/commit/b91c88d6a49faadbe404d56603bfe5510f63ef29))
+* **main:** allow putting custom config for nat gateways ([060bdc4](https://github.com/padok-team/terraform-google-network/commit/060bdc4f589143a9b66891c79f3db31e9d688713))
+* **main:** toset regions in locals ([4389d7b](https://github.com/padok-team/terraform-google-network/commit/4389d7b1c3d497b5d39ca0d98e5bba1d67343b98))
+
 ### [2.0.4](https://github.com/padok-team/terraform-google-network/compare/v2.0.3...v2.0.4) (2022-01-28)
 
 

@@ -3,12 +3,13 @@ module "gke" {
 
   name       = "testing"
   project_id = "library-344516"
+
   subnets = {
     "eu" = {
-      name             = "eu"
-      region           = "europe-west1"
-      primary_cidr     = "172.16.48.0/20"
-      serverless_cidr  = ""
+      name            = "eu"
+      region          = "europe-west1"
+      primary_cidr    = "172.16.48.0/20"
+      serverless_cidr = ""
       secondary_ranges = {
         pods = {
           name = "gke-pods-main"

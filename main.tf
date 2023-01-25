@@ -1,10 +1,10 @@
 locals {
   # Regions list
-  regions = flatten([
+  regions = toset(flatten([
     for subnet in var.subnets : [
       subnet.region
     ]
-  ])
+  ]))
 
   # VPC Access Connectors map
   vpc_access_connectors = {
@@ -59,7 +59,7 @@ module "vpc" {
 #
 
 resource "google_compute_router" "router" {
-  for_each = toset(local.regions)
+  for_each = local.regions
 
   project = var.project_id
   region  = each.key
@@ -74,7 +74,7 @@ resource "google_compute_router" "router" {
 #
 
 resource "google_compute_address" "ip" {
-  for_each = toset(local.regions)
+  for_each = local.regions
 
   project = var.project_id
   region  = each.key
@@ -86,7 +86,7 @@ resource "google_compute_address" "ip" {
 }
 
 resource "google_compute_router_nat" "nat" {
-  for_each = toset(local.regions)
+  for_each = local.nats
 
   project = var.project_id
 

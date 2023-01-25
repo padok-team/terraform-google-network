@@ -1,10 +1,21 @@
 locals {
   # Regions list
-  regions = flatten([
+  regions = toset(flatten([
     for subnet in var.subnets : [
       subnet.region
     ]
-  ])
+  ]))
+
+  default_nat = {
+    mode      = "ENDPOINT_INDEPENDANT_MAPPING"
+    min_ports = 64
+    max_ports = null
+  }
+
+  nats = {
+    for region in local.regions :
+    "${region}" => lookup(var.nats, region, local.default_nat)
+  }
 
   # VPC Access Connectors map
   vpc_access_connectors = {
@@ -59,7 +70,7 @@ module "vpc" {
 #
 
 resource "google_compute_router" "router" {
-  for_each = toset(local.regions)
+  for_each = local.regions
 
   project = var.project_id
   region  = each.key
@@ -74,7 +85,7 @@ resource "google_compute_router" "router" {
 #
 
 resource "google_compute_address" "ip" {
-  for_each = toset(local.regions)
+  for_each = local.regions
 
   project = var.project_id
   region  = each.key
@@ -86,7 +97,7 @@ resource "google_compute_address" "ip" {
 }
 
 resource "google_compute_router_nat" "nat" {
-  for_each = toset(local.regions)
+  for_each = local.nats
 
   project = var.project_id
 
@@ -98,12 +109,14 @@ resource "google_compute_router_nat" "nat" {
   source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
 
   nat_ips                             = [google_compute_address.ip[each.key].self_link]
-  min_ports_per_vm                    = 0
+  min_ports_per_vm                    = each.value.min_ports
+  max_ports_per_vm                    = each.value.max_ports
   udp_idle_timeout_sec                = 30
   icmp_idle_timeout_sec               = 30
   tcp_established_idle_timeout_sec    = 1200
   tcp_transitory_idle_timeout_sec     = 30
-  enable_endpoint_independent_mapping = true
+  enable_endpoint_independent_mapping = each.value.mode == "ENDPOINT_INDEPENDANT_MAPPING"
+  enable_dynamic_port_allocation      = each.value.mode == "DYNAMIC_PORT_ALLOCATION"
 
   log_config {
     enable = true

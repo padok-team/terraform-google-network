@@ -2,7 +2,7 @@
 
 ## Specifications
 
-- 2 Subnets in 2 different region
+- 3 Subnets in 3 different region with different NAT gateways
 - Serverless Connector in EU
 - Peering with Google
 

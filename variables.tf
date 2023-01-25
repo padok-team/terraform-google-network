@@ -35,7 +35,7 @@ variable "nats" {
     max_ports = optional(number, null)
   }))
   default     = {}
-  description = "Custom configuration for nat gateways. The map key must be the nat region and there must be a subnet in that region."
+  description = "Custom configuration for nat gateways. The map key must be the nat region and there must be a subnet in that region. Possible values for mode are `ENDPOINT_INDEPENDANT_MAPPING`, `DYNAMIC_PORT_ALLOCATION` or `NONE`."
 
   validation {
     condition     = alltrue([for nat in var.nats : contains(["DYNAMIC_PORT_ALLOCATION", "ENDPOINT_INDEPENDANT_MAPPING", "NONE"], nat.mode)])

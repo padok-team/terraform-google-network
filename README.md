@@ -4,7 +4,7 @@ Terraform module which creates network, subnets, and few peerings resources on G
 
 ## Examples
 
-- [Example of minimal network configuration use case](examples/basic/main.tf)
+- [Example of basic network configuration use case](examples/basic/main.tf)
 - [Example of network for GKE use case](examples/gke/main.tf)
 
 <!-- BEGIN_TF_DOCS -->
@@ -12,16 +12,17 @@ Terraform module which creates network, subnets, and few peerings resources on G
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-google-modules/network/google | 5.0.0 |
+| <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-google-modules/network/google | 5.2.0 |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_gcp_peering_cidr"></a> [gcp\_peering\_cidr](#input\_gcp\_peering\_cidr) | CIDR to reserve for GCP service in this VPC | `string` | n/a | yes |
-| <a name="input_name"></a> [name](#input\_name) | The name of the network being created | `any` | n/a | yes |
-| <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The ID of the project where this VPC will be created | `any` | n/a | yes |
-| <a name="input_subnets"></a> [subnets](#input\_subnets) | The list of subnets beeing created | <pre>object({<br>    name            = string<br>    region          = string<br>    primary_cidr    = string<br>    serverless_cidr = string<br>    secondary_ranges = map(object({<br>      name = string<br>      cidr = string<br>    }))<br>  })</pre> | n/a | yes |
+| <a name="input_name"></a> [name](#input\_name) | The name of the network being created | `string` | n/a | yes |
+| <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The ID of the project where this VPC will be created | `string` | n/a | yes |
+| <a name="input_subnets"></a> [subnets](#input\_subnets) | The list of subnets beeing created | <pre>map(object({<br>    name            = string<br>    region          = string<br>    primary_cidr    = string<br>    serverless_cidr = string<br>    secondary_ranges = map(object({<br>      name = string<br>      cidr = string<br>    }))<br>  }))</pre> | n/a | yes |
+| <a name="input_nats"></a> [nats](#input\_nats) | Custom configuration for nat gateways. The map key must be the nat region and there must be a subnet in that region. Possible values for mode are `ENDPOINT_INDEPENDANT_MAPPING`, `DYNAMIC_PORT_ALLOCATION` or `NONE`. | <pre>map(object({<br>    mode      = optional(string, "ENDPOINT_INDEPENDANT_MAPPING")<br>    min_ports = optional(number, 64)<br>    max_ports = optional(number, null)<br>  }))</pre> | `{}` | no |
 | <a name="input_routing_mode"></a> [routing\_mode](#input\_routing\_mode) | The network routing mode (default 'GLOBAL'). | `string` | `"GLOBAL"` | no |
 
 ## Outputs

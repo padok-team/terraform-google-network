@@ -20,6 +20,13 @@ variable "subnets" {
     region          = string
     primary_cidr    = string
     serverless_cidr = string
+    connector_specs = optional(object({
+      machine_type   = optional(string, null)
+      min_throughput = optional(number, null)
+      min_instances  = optional(number, null)
+      max_throughput = optional(number, null)
+      max_instances  = optional(number, null)
+    }), {})
     secondary_ranges = map(object({
       name = string
       cidr = string

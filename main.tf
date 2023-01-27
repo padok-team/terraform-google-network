@@ -162,4 +162,10 @@ resource "google_vpc_access_connector" "default" {
   name          = each.key
   ip_cidr_range = each.value.serverless_cidr
   network       = module.vpc.network_name
+
+  machine_type   = each.value.connector_specs.machine_type
+  min_throughput = each.value.connector_specs.min_throughput
+  min_instances  = each.value.connector_specs.min_instances
+  max_throughput = each.value.connector_specs.max_throughput
+  max_instances  = each.value.connector_specs.max_instances
 }

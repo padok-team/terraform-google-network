@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.2.0](https://github.com/padok-team/terraform-google-network/compare/v3.1.0...v3.2.0) (2023-01-27)
+
+
+### Features
+
+* **vpc_connector:** add specs ([58bde72](https://github.com/padok-team/terraform-google-network/commit/58bde72def7337829160632291dbd2075f0743d9))
+
 ## [3.1.0](https://github.com/padok-team/terraform-google-network/compare/v3.0.0...v3.1.0) (2023-01-25)
 
 

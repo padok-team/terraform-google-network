@@ -14,7 +14,7 @@ locals {
 
   nats = {
     for region in local.regions :
-    "${region}" => lookup(var.nats, region, local.default_nat)
+    region => lookup(var.nats, region, local.default_nat)
   }
 
   # VPC Access Connectors map

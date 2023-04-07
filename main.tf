@@ -27,9 +27,10 @@ locals {
   # Match the Google VPC module interface
   subnets = [
     for subnet in var.subnets : {
-      subnet_name   = subnet.name
-      subnet_ip     = subnet.primary_cidr
-      subnet_region = subnet.region
+      subnet_name           = subnet.name
+      subnet_ip             = subnet.primary_cidr
+      subnet_region         = subnet.region
+      subnet_private_access = "true"
     }
   ]
 

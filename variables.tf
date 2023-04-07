@@ -1,11 +1,11 @@
 variable "project_id" {
   type        = string
-  description = "The ID of the project where this VPC will be created"
+  description = "The ID of the project where this VPC will be created."
 }
 
 variable "name" {
   type        = string
-  description = "The name of the network being created"
+  description = "The name of the network being created."
 }
 
 variable "routing_mode" {
@@ -32,7 +32,7 @@ variable "subnets" {
       cidr = string
     }))
   }))
-  description = "The list of subnets beeing created"
+  description = "The list of subnets beeing created."
 }
 
 variable "nats" {
@@ -42,7 +42,7 @@ variable "nats" {
     max_ports = optional(number, null)
   }))
   default     = {}
-  description = "Custom configuration for nat gateways. The map key must be the nat region and there must be a subnet in that region. Possible values for mode are `ENDPOINT_INDEPENDANT_MAPPING`, `DYNAMIC_PORT_ALLOCATION` or `NONE`."
+  description = "The custom configuration for NAT gateways. The map key must be the nat region and there must be a subnet in that region. Possible values for mode are `ENDPOINT_INDEPENDANT_MAPPING`, `DYNAMIC_PORT_ALLOCATION` or `NONE`."
 
   validation {
     condition     = alltrue([for nat in var.nats : contains(["DYNAMIC_PORT_ALLOCATION", "ENDPOINT_INDEPENDANT_MAPPING", "NONE"], nat.mode)])
@@ -52,5 +52,5 @@ variable "nats" {
 
 variable "gcp_peering_cidr" {
   type        = string
-  description = "CIDR to reserve for GCP service in this VPC"
+  description = "The CIDR to reserve for GCP service in this VPC."
 }

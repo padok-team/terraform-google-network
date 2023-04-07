@@ -27,10 +27,9 @@ locals {
   # Match the Google VPC module interface
   subnets = [
     for subnet in var.subnets : {
-      subnet_name           = subnet.name
-      subnet_ip             = subnet.primary_cidr
-      subnet_region         = subnet.region
-      subnet_private_access = "true"
+      subnet_name   = subnet.name
+      subnet_ip     = subnet.primary_cidr
+      subnet_region = subnet.region
     }
   ]
 
@@ -49,6 +48,7 @@ locals {
 
 # Create network and its subnets
 module "vpc" {
+  #checkov:skip=CKV2_GCP_18: firewalls will be managed elsewhere
   source  = "terraform-google-modules/network/google"
   version = "6.0.1"
 

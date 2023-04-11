@@ -20,7 +20,7 @@ locals {
   # VPC Access Connectors map
   vpc_access_connectors = {
     for idx, subnet in values(var.subnets) :
-    "${subnet.region}-${idx}" => subnet
+    "${subnet.name}-${subnet.region}-${idx}" => subnet
     if subnet.serverless_cidr != ""
   }
 

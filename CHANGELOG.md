@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/padok-team/terraform-google-network/compare/v3.2.0...v4.0.0) (2023-04-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* **access_connector:** fix naming to avoid conflict with subnet indexes
+
+### Bug Fixes
+
+* **access_connector:** fix naming to avoid conflict with subnet indexes ([b4e2021](https://github.com/padok-team/terraform-google-network/commit/b4e2021a3c08ec3fbde9b4b85ef2ffbcfbbe730b))
+
 ## [3.2.0](https://github.com/padok-team/terraform-google-network/compare/v3.1.0...v3.2.0) (2023-01-27)
 
 

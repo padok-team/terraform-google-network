@@ -14,7 +14,7 @@ locals {
 
   nats = {
     for region in local.regions :
-    "${region}" => lookup(var.nats, region, local.default_nat)
+    region => lookup(var.nats, region, local.default_nat)
   }
 
   # VPC Access Connectors map
@@ -48,6 +48,7 @@ locals {
 
 # Create network and its subnets
 module "vpc" {
+  #checkov:skip=CKV2_GCP_18: firewalls will be managed elsewhere
   source  = "terraform-google-modules/network/google"
   version = "7.0.0"
 

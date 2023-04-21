@@ -1,4 +1,6 @@
 module "basic" {
+  #checkov:skip=CKV_GCP_74: cannot enforce private_ip_google_access using Google's VPC module
+  #checkov:skip=CKV_GCP_76: cannot enforce IPV6 private access using Google's VPC module
   source = "../.."
 
   name       = "testing"
@@ -16,6 +18,7 @@ module "basic" {
   }
 
   subnets = {
+
     "eu-1" = {
       name             = "eu-1"
       region           = "europe-west1"

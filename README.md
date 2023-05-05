@@ -12,17 +12,17 @@ Terraform module which creates network, subnets, and few peerings resources on G
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-google-modules/network/google | 5.2.0 |
+| <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-google-modules/network/google | 7.0.0 |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_gcp_peering_cidr"></a> [gcp\_peering\_cidr](#input\_gcp\_peering\_cidr) | CIDR to reserve for GCP service in this VPC | `string` | n/a | yes |
-| <a name="input_name"></a> [name](#input\_name) | The name of the network being created | `string` | n/a | yes |
-| <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The ID of the project where this VPC will be created | `string` | n/a | yes |
-| <a name="input_subnets"></a> [subnets](#input\_subnets) | The list of subnets beeing created | <pre>map(object({<br>    name            = string<br>    region          = string<br>    primary_cidr    = string<br>    serverless_cidr = string<br>    secondary_ranges = map(object({<br>      name = string<br>      cidr = string<br>    }))<br>  }))</pre> | n/a | yes |
-| <a name="input_nats"></a> [nats](#input\_nats) | Custom configuration for nat gateways. The map key must be the nat region and there must be a subnet in that region. Possible values for mode are `ENDPOINT_INDEPENDANT_MAPPING`, `DYNAMIC_PORT_ALLOCATION` or `NONE`. | <pre>map(object({<br>    mode      = optional(string, "ENDPOINT_INDEPENDANT_MAPPING")<br>    min_ports = optional(number, 64)<br>    max_ports = optional(number, null)<br>  }))</pre> | `{}` | no |
+| <a name="input_gcp_peering_cidr"></a> [gcp\_peering\_cidr](#input\_gcp\_peering\_cidr) | The CIDR to reserve for GCP service in this VPC. | `string` | n/a | yes |
+| <a name="input_name"></a> [name](#input\_name) | The name of the network being created. | `string` | n/a | yes |
+| <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The ID of the project where this VPC will be created. | `string` | n/a | yes |
+| <a name="input_subnets"></a> [subnets](#input\_subnets) | The list of subnets beeing created. | <pre>map(object({<br>    name            = string<br>    region          = string<br>    primary_cidr    = string<br>    serverless_cidr = string<br>    connector_specs = optional(object({<br>      machine_type   = optional(string, null)<br>      min_throughput = optional(number, null)<br>      min_instances  = optional(number, null)<br>      max_throughput = optional(number, null)<br>      max_instances  = optional(number, null)<br>    }), {})<br>    secondary_ranges = map(object({<br>      name = string<br>      cidr = string<br>    }))<br>  }))</pre> | n/a | yes |
+| <a name="input_nats"></a> [nats](#input\_nats) | The custom configuration for NAT gateways. The map key must be the nat region and there must be a subnet in that region. Possible values for mode are `ENDPOINT_INDEPENDANT_MAPPING`, `DYNAMIC_PORT_ALLOCATION` or `NONE`. | <pre>map(object({<br>    mode      = optional(string, "ENDPOINT_INDEPENDANT_MAPPING")<br>    min_ports = optional(number, 64)<br>    max_ports = optional(number, null)<br>  }))</pre> | `{}` | no |
 | <a name="input_routing_mode"></a> [routing\_mode](#input\_routing\_mode) | The network routing mode (default 'GLOBAL'). | `string` | `"GLOBAL"` | no |
 
 ## Outputs
@@ -37,6 +37,7 @@ Terraform module which creates network, subnets, and few peerings resources on G
 | <a name="output_subnets"></a> [subnets](#output\_subnets) | A map with keys of form subnet\_region/subnet\_name and values being the outputs of the google\_compute\_subnetwork resources used to create corresponding subnets. |
 | <a name="output_subnets_ids"></a> [subnets\_ids](#output\_subnets\_ids) | The IDs of the subnets being created |
 | <a name="output_subnets_names"></a> [subnets\_names](#output\_subnets\_names) | The names of the subnets being created |
+| <a name="output_vpc_access_connectors"></a> [vpc\_access\_connectors](#output\_vpc\_access\_connectors) | The VPC Access Connectors being created. |
 <!-- END_TF_DOCS -->
 
 ## License

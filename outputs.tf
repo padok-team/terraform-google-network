@@ -37,3 +37,8 @@ output "subnets_ids" {
   value       = module.vpc.subnets_ids
   description = "The IDs of the subnets being created"
 }
+
+output "vpc_access_connectors" {
+  value       = google_vpc_access_connector.default
+  description = "The VPC Access Connectors being created."
+}

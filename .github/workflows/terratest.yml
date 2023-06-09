@@ -29,7 +29,9 @@ jobs:
           go-version: 1.16
       - name: Install dependencies
         working-directory: ./tests
-        run: go mod download github.com/Azure/azure-sdk-for-go
+        run: |
+          go mod init terratest
+          go mod tidy
       - name: Run terratest
         working-directory: tests
-        run: go test --args ../examples/${{matrix.terratestTarget}}
+        run: go test -v --args ../examples/${{matrix.terratestTarget}}

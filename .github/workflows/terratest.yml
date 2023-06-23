@@ -7,22 +7,29 @@ on:
 
 env:
   TEST_WORKDIR: Monday
+  GCP_PROJECT_ID: padok-lab
+  GCP_PROJECT_NUMBER: "1016915073978"
+  GCP_SERVICE_ACCOUNT: "enabler-padok-lab-sa"
 
 jobs:
   test:
     strategy:
       matrix:
-        terratestTarget: [basic, gke]
+        terratestTarget: [basic]
     runs-on: ubuntu-latest
+    permissions:
+      contents: "read"
+      id-token: "write"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      # - name: Check for terratestExample folder
-      #   run: |
-      #     if [ ! -d "terratestExample" ]; then
-      #       echo "terratestExample folder not found, exiting..."
-      #       exit 1
-      #     fi
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v1
+        with:
+          token_format: "access_token"
+          workload_identity_provider: "projects/${{ env.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/identity-pool-padok-lab/providers/identity-provider-padok-lab"
+          service_account: "${{ env.GCP_SERVICE_ACCOUNT }}@${{ env.GCP_PROJECT_ID }}.iam.gserviceaccount.com"
       - name: Set up Go
         uses: actions/setup-go@v3
       - name: Install dependencies

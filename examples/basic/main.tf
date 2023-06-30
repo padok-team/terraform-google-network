@@ -1,4 +1,5 @@
 module "basic" {
+  #checkov:skip=CKV_TF_1:Ensure Terraform module sources use a commit hash
   #checkov:skip=CKV_GCP_74: cannot enforce private_ip_google_access using Google's VPC module
   #checkov:skip=CKV_GCP_76: cannot enforce IPV6 private access using Google's VPC module
   source = "../.."

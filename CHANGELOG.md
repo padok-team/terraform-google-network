@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.0](https://github.com/padok-team/terraform-google-network/compare/v4.0.0...v4.1.0) (2023-06-30)
+
+
+### Features
+
+* **checkov:** skip CKV_TF_1 and use version instead of commit hash ([675c97d](https://github.com/padok-team/terraform-google-network/commit/675c97deda8952e3acc906d0cb0f9abdf14524cc))
+
 ## [4.0.0](https://github.com/padok-team/terraform-google-network/compare/v3.2.0...v4.0.0) (2023-04-11)
 
 

@@ -3,11 +3,13 @@ name: Terratest
 on:
   push:
     # branches:
-    # - feat/terratest-github-action
+    #   - main
 
 env:
-  GCP_PROJECT_ID: padok-library-gcp-host
-  GCP_SERVICE_ACCOUNT: "identity-terraform-gcp-network"
+  TEST_WORKDIR: Monday
+  GCP_PROJECT_ID: padok-lab
+  GCP_PROJECT_NUMBER: "1016915073978"
+  GCP_SERVICE_ACCOUNT: "enabler-padok-lab-sa"
 
 jobs:
   test:
@@ -26,13 +28,13 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           token_format: "access_token"
-          workload_identity_provider: "projects/${{ GCP_PROJECT_ID.GCP }}/locations/global/workloadIdentityPools/identity-pool-padok-lab/providers/identity-provider-padok-lab"
+          workload_identity_provider: "projects/${{ env.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/identity-pool-padok-lab/providers/identity-provider-padok-lab"
           service_account: "${{ env.GCP_SERVICE_ACCOUNT }}@${{ env.GCP_PROJECT_ID }}.iam.gserviceaccount.com"
       - name: Set up Go
         uses: actions/setup-go@v3
       - name: Install dependencies
         working-directory: ./tests
-        run: go mod tidy
+        run: go mod download github.com/Azure/azure-sdk-for-go
       - name: Run terratest
         working-directory: tests
-        run: go test -destroy
+        run: go test --args ../examples/${{matrix.terratestTarget}}

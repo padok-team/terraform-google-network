@@ -17,6 +17,7 @@ provider "google" {
 data "google_client_config" "this" {}
 
 module "github_action_enabler_padok_lab_sa" {
+  #checkov:skip=CKV_TF_1 Ensure Terraform module sources use a commit hash
   source       = "github.com/padok-team/terraform-google-serviceaccount?ref=v2.0.0"
   name         = "identity-terraform-gcp-network"
   project_id   = data.google_client_config.this.project
@@ -24,6 +25,7 @@ module "github_action_enabler_padok_lab_sa" {
 }
 
 module "gh_oidc" {
+  #checkov:skip=CKV_TF_1 Ensure Terraform module sources use a commit hash
   source      = "terraform-google-modules/github-actions-runners/google//modules/gh-oidc"
   version     = "v3.1.1"
   project_id  = data.google_client_config.this.project
@@ -36,6 +38,13 @@ module "gh_oidc" {
       attribute = "attribute.repository/padok-team/terraform-google-network"
     }
   }
+}
+
+resource "google_project_iam_member" "github_actions_read_scan_result" {
+  project = data.google_client_config.this.project
+
+  role   = "roles/editor"
+  member = "serviceAccount:${module.github_action_enabler_padok_lab_sa.this.email}"
 }
 
 output "sa_email" {

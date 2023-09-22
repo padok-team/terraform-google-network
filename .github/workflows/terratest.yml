@@ -7,6 +7,7 @@ on:
 
 env:
   GCP_PROJECT_ID: padok-library-gcp-host
+  GCP_PROJECT_NUMBER: "552840532740"
   GCP_SERVICE_ACCOUNT: "identity-terraform-gcp-network"
 
 jobs:
@@ -26,7 +27,7 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           token_format: "access_token"
-          workload_identity_provider: "projects/${{ env.GCP_PROJECT_ID }}/locations/global/workloadIdentityPools/identity-pool-padok-lab/providers/identity-provider-padok-lab"
+          workload_identity_provider: "projects/${{ env.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/identity-terraform-gpc-network/providers/identity-terraform-gcp-network"
           service_account: "${{ env.GCP_SERVICE_ACCOUNT }}@${{ env.GCP_PROJECT_ID }}.iam.gserviceaccount.com"
       - name: Set up Go
         uses: actions/setup-go@v3

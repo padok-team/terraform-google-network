@@ -2,8 +2,8 @@ name: Terratest
 
 on:
   push:
-    branches:
-      - feat/terratest-github-action
+    # branches:
+    # - feat/terratest-github-action
 
 env:
   GCP_PROJECT_ID: padok-library-gcp-host

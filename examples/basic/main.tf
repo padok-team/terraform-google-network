@@ -5,7 +5,7 @@ module "basic" {
   source = "../.."
 
   name       = "testing-terratest"
-  project_id = "padok-lab"
+  project_id = "padok-library-gcp-host"
 
   nats = {
     "europe-west1" = {

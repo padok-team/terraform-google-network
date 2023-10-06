@@ -6,9 +6,9 @@ on:
     # - feat/terratest-github-action
 
 env:
-  GCP_PROJECT_ID: padok-library-gcp-host
-  GCP_PROJECT_NUMBER: "552840532740"
-  GCP_SERVICE_ACCOUNT: "identity-terraform-gcp-network"
+  GCP_PROJECT_ID: terratest-dev
+  GCP_PROJECT_NUMBER: "704822998943"
+  GCP_SERVICE_ACCOUNT: "gh-terratest-dev"
 
 jobs:
   test:
@@ -21,13 +21,13 @@ jobs:
       id-token: "write"
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Authenticate to Google Cloud
         id: auth
-        uses: google-github-actions/auth@v1
+        uses: google-github-actions/auth@v2
         with:
           token_format: "access_token"
-          workload_identity_provider: "projects/${{ env.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/identity-terraform-gpc-network/providers/identity-terraform-gcp-network"
+          workload_identity_provider: "projects/${{ env.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/github-identity/providers/github-oidc"
           service_account: "${{ env.GCP_SERVICE_ACCOUNT }}@${{ env.GCP_PROJECT_ID }}.iam.gserviceaccount.com"
       - name: Set up Go
         uses: actions/setup-go@v3

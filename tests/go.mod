@@ -2,6 +2,8 @@ module github.com/padok-team/terraform-google-network
 
 go 1.21
 
+toolchain go1.21.5
+
 require github.com/gruntwork-io/terratest v0.46.8
 
 require (

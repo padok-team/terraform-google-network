@@ -5,7 +5,7 @@ module "gke" {
   source = "../.."
 
   name       = "testing"
-  project_id = "padok-library-gcp-host"
+  project_id = "terratest-dev"
 
   subnets = {
     "eu" = {

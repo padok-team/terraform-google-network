@@ -31,6 +31,8 @@ jobs:
           service_account: "${{ env.GCP_SERVICE_ACCOUNT }}@${{ env.GCP_PROJECT_ID }}.iam.gserviceaccount.com"
       - name: Set up Go
         uses: actions/setup-go@v3
+        with:
+          go-version: 1.21
       - name: Install dependencies
         working-directory: ./tests
         run: go mod tidy

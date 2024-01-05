@@ -11,9 +11,7 @@ func TestBasic(t *testing.T) {
 		TerraformDir: "../examples/basic",
 	})
 
-	if *destroy {
-		defer terraform.Destroy(t, terraformOptions)
-	}
+	defer terraform.Destroy(t, terraformOptions)
 
 	terraform.InitAndApply(t, terraformOptions)
 

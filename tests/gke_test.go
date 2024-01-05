@@ -14,9 +14,7 @@ func TestGke(t *testing.T) {
 		// VarFiles: []string{"tests/tests.tfvars"},
 	})
 
-	if *destroy {
-		defer terraform.Destroy(t, terraformOptions)
-	}
+	defer terraform.Destroy(t, terraformOptions)
 
 	// // List folders in ../examples
 	// folders, err := os.ReadDir("../examples")

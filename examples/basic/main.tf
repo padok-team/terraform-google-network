@@ -4,8 +4,8 @@ module "basic" {
   #checkov:skip=CKV_GCP_76: cannot enforce IPV6 private access using Google's VPC module
   source = "../.."
 
-  name       = "testing"
-  project_id = "padok-library-gcp-host"
+  name       = "testing-terratest"
+  project_id = "terratest-dev"
 
   nats = {
     "europe-west1" = {

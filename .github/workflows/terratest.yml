@@ -30,7 +30,7 @@ jobs:
           workload_identity_provider: "projects/${{ env.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/github-identity/providers/github-oidc"
           service_account: "${{ env.GCP_SERVICE_ACCOUNT }}@${{ env.GCP_PROJECT_ID }}.iam.gserviceaccount.com"
       - name: Set up Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v5
         with:
           go-version: 1.21
       - name: Install dependencies

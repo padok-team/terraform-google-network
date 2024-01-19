@@ -38,4 +38,4 @@ jobs:
         run: go mod tidy
       - name: Run terratest
         working-directory: tests
-        run: go test -destroy
+        run: go test

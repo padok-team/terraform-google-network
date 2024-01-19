@@ -1,9 +1,9 @@
 name: Terratest
 
 on:
-  push:
-    # branches:
-    # - feat/terratest-github-action
+  pull_request:
+    branches:
+      - main
 
 env:
   GCP_PROJECT_ID: terratest-dev

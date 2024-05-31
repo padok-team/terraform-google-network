@@ -20,6 +20,7 @@ variable "subnets" {
     region          = string
     primary_cidr    = string
     serverless_cidr = string
+    purpose         = optional(string, null)
     connector_specs = optional(object({
       machine_type   = optional(string, null)
       min_throughput = optional(number, null)

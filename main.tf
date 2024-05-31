@@ -30,6 +30,7 @@ locals {
       subnet_name   = subnet.name
       subnet_ip     = subnet.primary_cidr
       subnet_region = subnet.region
+      purpose       = subnet.purpose
     }
   ]
 

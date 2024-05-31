@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.0](https://github.com/padok-team/terraform-google-network/compare/v4.0.0...v4.1.0) (2024-05-31)
+
+
+### Features
+
+* add boostrap ([67138ae](https://github.com/padok-team/terraform-google-network/commit/67138ae1df72f5b2f7ec6f1216cc547fd97d5d15))
+* add oicd to ci job ([7fc981b](https://github.com/padok-team/terraform-google-network/commit/7fc981b672aa11d0768e9da25c668e64410e42f5))
+* add terratest.yaml github action workflow ([a275f05](https://github.com/padok-team/terraform-google-network/commit/a275f0528d9d1b96d452921497e654b1089443b7))
+* add testing ([394107e](https://github.com/padok-team/terraform-google-network/commit/394107e2de843c77532381d2024cb31f69e6c85c))
+* added purposes to subnet ([e5b366c](https://github.com/padok-team/terraform-google-network/commit/e5b366ceb7207ba55e64b8591c5547fd1f91ff2a))
+* **checkov:** skip CKV_TF_1 and use version instead of commit hash ([675c97d](https://github.com/padok-team/terraform-google-network/commit/675c97deda8952e3acc906d0cb0f9abdf14524cc))
+* **terratest:** add tests folder with default terraform_apply_test ([7538389](https://github.com/padok-team/terraform-google-network/commit/75383895d82383e2ca9d267be0f179842ec470bb))
+
+
+### Bug Fixes
+
+* ci ([89d65bb](https://github.com/padok-team/terraform-google-network/commit/89d65bb0965ee6c607f510b76c4f73ca758ef04b))
+* ci ([3abff71](https://github.com/padok-team/terraform-google-network/commit/3abff7161ee4e320599d34bf6bdd4f1affa6d597))
+* clean code ([1f7e328](https://github.com/padok-team/terraform-google-network/commit/1f7e32842b24e9194422527c59847f068b87a082))
+* correct flag ([dada8a0](https://github.com/padok-team/terraform-google-network/commit/dada8a0e409f031e24965b084fb6e7187bf252a9))
+* pipeline ([cd6b2bf](https://github.com/padok-team/terraform-google-network/commit/cd6b2bf5db2291471dc73dc666423e2d0975e26f))
+* remove push restriction ([a70e256](https://github.com/padok-team/terraform-google-network/commit/a70e256352b9647202095a7ce400999e79032fd8))
+
 ## [4.0.0](https://github.com/padok-team/terraform-google-network/compare/v3.2.0...v4.0.0) (2023-04-11)
 
 

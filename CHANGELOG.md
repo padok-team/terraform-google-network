@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.2.0](https://github.com/padok-team/terraform-google-network/compare/v4.1.0...v4.2.0) (2024-06-28)
+
+
+### Features
+
+* bump provider & module version ([d0c31f7](https://github.com/padok-team/terraform-google-network/commit/d0c31f79f44a2a968957c46ffd05f3fd3e08651d))
+
 ## [4.1.0](https://github.com/padok-team/terraform-google-network/compare/v4.0.0...v4.1.0) (2024-05-31)
 
 

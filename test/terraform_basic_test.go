@@ -6,7 +6,7 @@ import (
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
-func TestBasic(t *testing.T) {
+func TestTerraformPlanBasic(t *testing.T) {
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		TerraformDir: "../examples/basic",
 	})

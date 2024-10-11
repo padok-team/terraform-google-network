@@ -6,7 +6,7 @@ import (
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
-func TestGke(t *testing.T) {
+func TestTerraformPlanGKE(t *testing.T) {
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		TerraformDir: "../examples/gke",
 	})

@@ -1,41 +1,35 @@
-name: Terratest
-
 on:
   pull_request:
     branches:
       - main
-
-env:
-  GCP_PROJECT_ID: terratest-dev
-  GCP_PROJECT_NUMBER: "704822998943"
-  GCP_SERVICE_ACCOUNT: "gh-terratest-dev"
-
+    paths:
+      - "**.tf"
+      - "test/*.go"
+name: terratest
 jobs:
-  test:
-    strategy:
-      matrix:
-        terratestTarget: [basic]
+  terratest:
     runs-on: ubuntu-latest
+
     permissions:
       contents: "read"
       id-token: "write"
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Authenticate to Google Cloud
-        id: auth
-        uses: google-github-actions/auth@v2
+      - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
         with:
-          token_format: "access_token"
-          workload_identity_provider: "projects/${{ env.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/github-identity/providers/github-oidc"
-          service_account: "${{ env.GCP_SERVICE_ACCOUNT }}@${{ env.GCP_PROJECT_ID }}.iam.gserviceaccount.com"
-      - name: Set up Go
-        uses: actions/setup-go@v3
+          go-version: "1.22.x"
+      - uses: "google-github-actions/auth@v2"
         with:
-          go-version: 1.21
-      - name: Install dependencies
-        working-directory: ./tests
-        run: go mod tidy
-      - name: Run terratest
-        working-directory: tests
-        run: go test
+          project_id: "library-344516"
+          workload_identity_provider: "projects/270410071403/locations/global/workloadIdentityPools/github/providers/padok-gcp-library"
+      - name: tfswitch
+        run: |
+          wget https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh
+          chmod 755 install.sh
+          ./install.sh -b ~/.local/bin v1.2.2 # Last arg is the desired tfswitch version
+          rm install.sh
+          tfswitch -b ~/.local/bin/terraform
+      - name: Test with the Go CLI
+        run: go test -timeout 30s ./test

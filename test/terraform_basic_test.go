@@ -13,5 +13,5 @@ func TestBasic(t *testing.T) {
 
 	defer terraform.Destroy(t, terraformOptions)
 
-	terraform.InitAndApply(t, terraformOptions)
+	terraform.InitAndPlan(t, terraformOptions)
 }

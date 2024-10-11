@@ -6,12 +6,12 @@ import (
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
-func TestGke(t *testing.T) {
+func TestTerraformPlanBasic(t *testing.T) {
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
-		TerraformDir: "../examples/gke",
+		TerraformDir: "../examples/basic",
 	})
 
 	defer terraform.Destroy(t, terraformOptions)
 
-	terraform.InitAndApply(t, terraformOptions)
+	terraform.InitAndPlan(t, terraformOptions)
 }

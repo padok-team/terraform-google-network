@@ -4,8 +4,8 @@ module "gke" {
   #checkov:skip=CKV_GCP_76: cannot enforce IPV6 private access using Google's VPC module
   source = "../.."
 
-  name       = "testing"
-  project_id = "terratest-dev"
+  name       = "terratest-network-gke"
+  project_id = "padok-cloud-factory"
 
   subnets = {
     "eu" = {

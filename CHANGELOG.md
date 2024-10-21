@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.3.0](https://github.com/padok-team/terraform-google-network/compare/v4.2.0...v4.3.0) (2024-10-21)
+
+
+### Features
+
+* **upgrade:** upgrade hashicorp/google provider to version = ~&gt; 6.0 and hashicorp/random to version = ~> 3.1 ([055dc12](https://github.com/padok-team/terraform-google-network/commit/055dc120f22563bb1ac6795a59c48295c6b6cf2b))
+
 ## [4.2.0](https://github.com/padok-team/terraform-google-network/compare/v4.1.0...v4.2.0) (2024-06-28)
 
 

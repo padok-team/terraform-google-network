@@ -50,7 +50,9 @@ locals {
 # Create network and its subnets
 module "vpc" {
   #checkov:skip=CKV2_GCP_18: firewalls will be managed elsewhere
-  source = "github.com/terraform-google-modules/terraform-google-network?ref=7957e51850e248ca09b02fb445a6e56ac7a0e58c" # v9.3.0
+   #checkov:skip=CKV_TF_1: we decided to be somehow flexible with versions and we cannot add a precise commit sha
+   source  = "terraform-google-modules/network/google"
+   version = "9.3.0"
 
   project_id = var.project_id
 
